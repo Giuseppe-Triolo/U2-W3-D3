@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon Books</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div id="container" class="row mx-auto justify-content-center"></div>
+
+    <script>
+      const url = "https://striveschool-api.herokuapp.com/books";
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          createCards(data);
+        })
+        .catch((error) => console.error("Errore nel recupero dei dati:", error));
+      function createCards(data) {
+        const cardContainer = document.getElementById("container");
+
+        data.forEach((item) => {
+          const card = document.createElement("div");
+          card.classList.add("card", "col-4", "m-2");
+          card.style.maxWidth = "400px";
+
+          card.innerHTML = `
+        <img src="${item.img}" class="card-img-top" alt="Immagine">
+        <div class="card-body">
+          <h5 class="card-title">${item.title}</h5>
+          <p class="card-price">${item.price}€</p>
+          <button class="btn btn-danger" onclick="scarta(this)">Scarta</button>
+        </div>
+      `;
+
+          cardContainer.appendChild(card);
+        });
+      }
+      function scarta(button) {
+        const cardBody = button.closest(".card-body");
+        const card = cardBody.closest(".card");
+        card.remove();
+      }
+    </script>
+  </body>
+</html>
